@@ -1,0 +1,44 @@
+---
+title: "craps"
+author: "Jason Yoo"
+date: "2/25/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+```
+
+```{r}
+dice <- c(1,2,3,4,5,6)
+# sample(dice, 1, replace = TRUE)
+
+roll_one_die <- function(){
+  sample(1:6, size = 1)
+}
+
+roll_two_die <- function(){
+  roll_one_die() + roll_one_die()
+}
+
+# roll_10 <- function(n){
+#   for (i in 1:n){
+#     roll_two_die()
+#   }
+# }
+map_int(1:10, ~ roll_two_die())
+```
+
+
+```{r}
+add_dice <- function(n = 1) {
+  stopifnot(is.numeric(n))
+  sum(sample(1:6, n, replace = TRUE))
+}
+roll_dice <- function(n = 1){
+  map_int(rep(2, n), add_dice)
+}
+dicerolls <- data.frame("numbers" = roll_dice(10000))
+dicerolls %>% ggplot(aes(numbers)) + geom_bar()
+```
